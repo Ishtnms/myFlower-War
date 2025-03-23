@@ -6,6 +6,14 @@ public class GameManagers {
     public static enum state{
         prepar, star , think , clear , end , gameover
     }
+    public static enum Player{
+        Red,Blue
+    }
+
+    public static enum PiecesType{
+        Leaf,Root,Stem
+    }
+    public static Player GamePlayer = Player.Blue;
     public static state gameState = state.prepar;
     public static void main(String[] args) {
         while(gameState != state.gameover){

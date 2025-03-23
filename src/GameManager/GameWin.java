@@ -17,7 +17,7 @@ public class GameWin extends JFrame {
     Image offScreenImage ;
     @Override
     public void paint(Graphics g){
-        offScreenImage = this.createImage(1000,1000);
+        offScreenImage = this.createImage(600,600);
         Graphics gImage = offScreenImage.getGraphics();
         GameFrame.paintMainWin(gImage);
         g.drawImage(offScreenImage,0,0,null);

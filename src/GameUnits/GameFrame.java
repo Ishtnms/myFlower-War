@@ -12,6 +12,17 @@ public class GameFrame {
         jFrame.setVisible(true);
     }
     public static void paintMainWin(Graphics g){
-            g.drawImage(GameImg.gameMap,50,50, null);
+        for(int i = 0 ; i < 4 ; i++){
+            g.setColor(Color.BLUE);
+            g.fillRect(60*(i+3),60,60,60);
+            g.setColor(Color.RED);
+            g.fillRect(60*(i+3),480,60,60);
+        }
+        g.setColor(Color.BLACK);
+        for(int i = 0 ; i <= 8 ; i++){
+            g.drawLine(60+60*i,60,60+60*i,540);
+            g.drawLine(60,60+60*i,540,60+60*i);
+        }
+
     }
 }
