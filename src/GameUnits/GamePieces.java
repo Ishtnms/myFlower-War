@@ -28,7 +28,30 @@ public class GamePieces {
             camp = gameCamp;
         }
         public void paintSelf(Graphics g){
+                if(type == GameManagers.PiecesType.Leaf){
+                        if(camp == GameManagers.Player.Red){
+                                g.drawImage(GameImg.RedLeaf,(positionC+1)*60+5,(positionR+1)*60+5,null);}
+                        if(camp == GameManagers.Player.Blue){
+                                g.drawImage(GameImg.BlueLeaf,(positionC+1)*60+5,(positionR+1)*60+5,null);
+                        }
+                }
+                if(type == GameManagers.PiecesType.Root){
+                        if(camp == GameManagers.Player.Red){
+                                g.drawImage(GameImg.RedRoot,(positionC+1)*60+5,(positionR+1)*60+5,null);}
+                        if(camp == GameManagers.Player.Blue){
+                                g.drawImage(GameImg.BlueRoot,(positionC+1)*60+5,(positionR+1)*60+5,null);
+                        }
 
+
+                }
+                if(type == GameManagers.PiecesType.Stem){
+                        if(camp == GameManagers.Player.Red){
+                                g.drawImage(GameImg.RedStem,(positionC+1)*60+5,(positionR+1)*60+5,null);}
+                        if(camp == GameManagers.Player.Blue){
+                                g.drawImage(GameImg.BlueStem,(positionC+1)*60+5,(positionR+1)*60+5,null);
+                        }
+
+                }
         }
 
 }

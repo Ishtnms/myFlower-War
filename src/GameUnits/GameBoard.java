@@ -5,16 +5,16 @@ import GameManager.GameWin;
 
 public class GameBoard {
 
-    public static GamePieces currentPieces;
+    GamePieces currentPieces = null;
     static GameBoard gameBoard = new GameBoard("棋盘创建");
-    public static GamePieces ERedRoot = null;
-    public static GamePieces EBlueRoot = null;
-    public static GamePieces ERedStem = null;
-    public static GamePieces EBlueStem = null;
+    public GamePieces ERedRoot = null;
+    public GamePieces EBlueRoot = null;
+    public GamePieces ERedStem = null;
+    public GamePieces EBlueStem = null;
     public static GameBoard getGameBoard(){
         return gameBoard;
     }
-    GamePieces[][] board = new GamePieces[8][8];
+    public GamePieces[][] board = new GamePieces[8][8];
    void boradInit()
     {
         for(int i = 0 ; i < 8 ; i++)
@@ -39,7 +39,27 @@ public class GameBoard {
     public GameBoard(){
 
     }
-
+    public void setCurrentPiecesNUll(){
+       currentPieces = null;
+    }
+    public GamePieces getCurrentPieces(){return currentPieces;}
+    public void play(int r ,int c){
+       if(GameManagers.gameState == GameManagers.state.think)
+       currentPieces = playLeaf(r,c);
+    }
+    public void play(int r , int c , GameManagers.PiecesType type){
+       if( GameManagers.gameState == GameManagers.state.think)
+       {if(type == GameManagers.PiecesType.Leaf){
+           currentPieces = playLeaf(r,c);
+        }
+        if(type == GameManagers.PiecesType.Stem){
+           currentPieces = playStem(r,c);
+        }
+        if(type == GameManagers.PiecesType.Root){
+           currentPieces = playRoot(r,c);
+        }
+       }
+    }
     public  GamePieces playLeaf(int r ,int c){
        if(board[r][c] == null){
         board[r][c] = new GamePieces(r,c,GameManagers.PiecesType.Leaf,GameManagers.GamePlayer);
@@ -48,14 +68,14 @@ public class GameBoard {
    }
    public GamePieces playRoot(int r,int c){
      if(board[r][c] == null){
-         if(GameManagers.GamePlayer == GameManagers.Player.Blue && GameBoard.EBlueRoot == null){
+         if(GameManagers.GamePlayer == GameManagers.Player.Blue && GameBoard.getGameBoard().EBlueRoot == null){
              board[r][c] = new GamePieces(r,c, GameManagers.PiecesType.Root,GameManagers.GamePlayer);
-             GameBoard.EBlueRoot = board[r][c];
+             GameBoard.getGameBoard().EBlueRoot = board[r][c];
              return board[r][c];
          }
-         if(GameManagers.GamePlayer == GameManagers.Player.Red && GameBoard.ERedRoot == null){
+         if(GameManagers.GamePlayer == GameManagers.Player.Red && GameBoard.getGameBoard().ERedRoot == null){
              board[r][c] = new GamePieces(r,c, GameManagers.PiecesType.Root,GameManagers.GamePlayer);
-             GameBoard.ERedRoot = board[r][c];
+             GameBoard.getGameBoard().ERedRoot = board[r][c];
              return board[r][c];
          }
      }
@@ -63,14 +83,14 @@ public class GameBoard {
    }
    public GamePieces playStem(int r,int c){
        if(board[r][c] == null){
-           if(GameManagers.GamePlayer == GameManagers.Player.Blue && GameBoard.EBlueStem == null){
+           if(GameManagers.GamePlayer == GameManagers.Player.Blue && GameBoard.getGameBoard().EBlueStem == null){
                board[r][c] = new GamePieces(r,c, GameManagers.PiecesType.Stem,GameManagers.GamePlayer);
-               GameBoard.EBlueStem = board[r][c];
+               GameBoard.getGameBoard().EBlueStem = board[r][c];
                return board[r][c];
            }
-           if(GameManagers.GamePlayer == GameManagers.Player.Red && GameBoard.ERedStem == null){
+           if(GameManagers.GamePlayer == GameManagers.Player.Red && GameBoard.getGameBoard().ERedStem == null){
                board[r][c] = new GamePieces(r,c, GameManagers.PiecesType.Stem,GameManagers.GamePlayer);
-               GameBoard.ERedStem = board[r][c];
+               GameBoard.getGameBoard().ERedStem = board[r][c];
                return board[r][c];
            }
        }
@@ -85,7 +105,7 @@ public class GameBoard {
     }
     //实现棋子推动的方法
     //向右推
-    public void clearOfPushRR(){
+    void clearOfPushRR(){
       int cellCount = 0;//记录需要推动的棋子
       for(int c = currentPieces.getPC()+1 ; c <= currentPieces.getPC()+3 ; c++){
           if( c > 7){continue;}//不能超出范围
@@ -107,7 +127,7 @@ public class GameBoard {
 
     }
     //向左推
-    public void clearOfPushRL(){
+    void clearOfPushRL(){
         int cellCount = 0;
         for(int c = currentPieces.getPC()-1 ; c >= currentPieces.getPC()-3 ; c--){
             if( c < 0){continue;}
@@ -119,7 +139,7 @@ public class GameBoard {
             if(board[currentPieces.getPR()][c].getCamp() == currentPieces.getCamp()){return;}
             cellCount++;
         }
-        for(int c = currentPieces.getPC()-cellCount ; c > currentPieces.getPC() ; c++){
+        for(int c = currentPieces.getPC()-cellCount ; c < currentPieces.getPC() ; c++){
             if(board[currentPieces.getPR()][c] != null){
                 board[currentPieces.getPR()][c].setPositionC(c-1);
                 board[currentPieces.getPR()][c-1] = board[currentPieces.getPR()][c];
@@ -128,7 +148,7 @@ public class GameBoard {
         }
     }
     //向上推
-    public void clearOfPushCU(){
+    void clearOfPushCD(){
        int cellCount = 0;
        for(int r = currentPieces.getPR()+1; r <= currentPieces.getPR()+3 ; r++){
            if(r>7){continue;}
@@ -138,6 +158,7 @@ public class GameBoard {
            if(r == 7 && (currentPieces.getPC()+1<6||currentPieces.getPC()+1>1)&&currentPieces.getCamp() == GameManagers.Player.Red){return;}
            if(board[r][currentPieces.getPC()].getType() == GameManagers.PiecesType.Root){return;}
            if(board[r][currentPieces.getPC()].getCamp() == currentPieces.getCamp()){return;}
+           cellCount++;
        }
        for(int r = currentPieces.getPR()+cellCount; r >currentPieces.getPR();r--){
            if(board[r][currentPieces.getPC()] != null){
@@ -148,7 +169,7 @@ public class GameBoard {
        }
     }
     //向下推
-    public void clearOfPushCD(){
+    void clearOfPushCU(){
         int cellCount = 0;
         for(int r = currentPieces.getPR()-1; r >= currentPieces.getPR()-3 ; r--){
             if(r<0){continue;}
@@ -158,10 +179,11 @@ public class GameBoard {
             if(r == 7 && (currentPieces.getPC()+1<6||currentPieces.getPC()+1>1)&&currentPieces.getCamp() == GameManagers.Player.Red){return;}
             if(board[r][currentPieces.getPC()].getType() == GameManagers.PiecesType.Root){return;}
             if(board[r][currentPieces.getPC()].getCamp() == currentPieces.getCamp()){return;}
+            cellCount++;
         }
         for(int r = currentPieces.getPR()-cellCount; r < currentPieces.getPR();r++){
             if(board[r][currentPieces.getPC()] != null){
-                board[r][currentPieces.getPC()]=board[r-1][currentPieces.getPC()];
+                board[r][currentPieces.getPC()].setPositionR(r-1);
                 board[r-1][currentPieces.getPC()] = board[r][currentPieces.getPC()];
                 board[r][currentPieces.getPC()] =null;
             }
@@ -170,16 +192,16 @@ public class GameBoard {
     //以上为实现棋子推动的方法
     //删除相连棋子的方法
     public void clearOfClearPieces(){
-       for(int r=0 ; r < 8 ; r++){
-           for(int c = 0 ; c < 8 ; c++){
-               if(board[r+1][c] != null && board[r-1][c] != null){
+       for(int r=1 ; r < 7 ; r++){
+           for(int c = 1 ; c < 7 ; c++){
+               if(board[r+1][c] != null && board[r-1][c] != null&&board[r][c]!=null){
                    if(board[r][c].getCamp() == board[r+1][c].getCamp() && board[r][c].getCamp() == board[r-1][c].getCamp()){
                        board[r][c].setClear(true);
                        board[r-1][c].setClear((true));
                        board[r+1][c].setClear(true);
                    }
                }
-               if(board[r][c+1]!=null&&board[r][c-1]!=null){
+               if(board[r][c+1]!=null&&board[r][c-1]!=null&&board[r][c]!=null){
                    if(board[r][c].getCamp() == board[r][c+1].getCamp()&&board[r][c].getCamp() == board[r][c-1].getCamp()){
                        board[r][c].setClear(true);
                        board[r][c+1].setClear(true);
