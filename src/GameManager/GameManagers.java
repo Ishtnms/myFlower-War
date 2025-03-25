@@ -5,7 +5,7 @@ import GameUnits.GameFrame;
 
 public class GameManagers {
     public static enum state{
-        prepar, star , think , clear , end , gameover,shift
+        prepar, star , think , clear , end , gameover,shift,ok
     }
     public static enum Player{
         Red,Blue
@@ -17,7 +17,7 @@ public class GameManagers {
     public static Player GamePlayer = Player.Blue;
     public static state gameState = state.prepar;
     public static void main(String[] args) {
-        while(gameState != state.gameover){
+        while(gameState != state.ok){
             switch(gameState){
                 case prepar:
                     gameState = state.star;
@@ -34,6 +34,7 @@ public class GameManagers {
                         throw new RuntimeException(e);
                     }
                     if(GameBoard.getGameBoard().getCurrentPieces() != null){
+                        System.out.print(GameBoard.getGameBoard().getCurrentPieces().getPC());
                         GameWin.getGameWin().repaint();
                         gameState = state.shift;
                     }
@@ -51,14 +52,16 @@ public class GameManagers {
                     break;
                 case end:
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     GameWin.getGameWin().repaint();
-                    gameState = state.think;
+                    gameState = GameBoard.getGameBoard().gameEndJudge();
                     break;
                 case gameover:
+                    System.out.print(GamePlayer);
+                    gameState = state.ok;
                     break;
             }
         }

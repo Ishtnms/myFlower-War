@@ -48,7 +48,7 @@ public class GameBoard {
        currentPieces = playLeaf(r,c);
     }
     public void play(int r , int c , GameManagers.PiecesType type){
-       if( GameManagers.gameState == GameManagers.state.think)
+       if( GameManagers.gameState == GameManagers.state.think&&(CanPlayJudge.canPlay1(r,c)||CanPlayJudge.canPlay2(r,c)))
        {if(type == GameManagers.PiecesType.Leaf){
            currentPieces = playLeaf(r,c);
         }
@@ -219,6 +219,17 @@ public class GameBoard {
                }
            }
        }
+    }
+    public GameManagers.state gameEndJudge(){
+       int ER;
+       int count = 0;
+       if(GameManagers.GamePlayer == GameManagers.Player.Blue){ ER = 0;}
+       else{ER = 7;}
+       for(int EC = 2 ; EC <=5 ; EC++){
+           if(board[ER][EC] != null){count++;}
+       }
+       if(count==4){return GameManagers.state.gameover;}
+        else {return GameManagers.state.think;}
     }
 //   public static void main(String[] args) {
 //       boradinit();

@@ -1,6 +1,7 @@
 package GameUnits;
 
 import GameManager.GameManagers;
+import GameManager.GameWin;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
@@ -28,11 +29,13 @@ public class PiecesPlayWin extends JFrame{
     }
     void addButton(){
         jButtonLeaf.addActionListener((e) -> {GameBoard.getGameBoard().play(r,c, GameManagers.PiecesType.Leaf);
+            GameWin.getGameWin().win = null;
             dispose();});
         jButtonStem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GameBoard.getGameBoard().play(r,c, GameManagers.PiecesType.Stem);
+                GameWin.getGameWin().win = null;
                 dispose();
             }
         });
@@ -40,6 +43,7 @@ public class PiecesPlayWin extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 GameBoard.getGameBoard().play(r,c, GameManagers.PiecesType.Root);
+                GameWin.getGameWin().win = null;
                 dispose();
             }
         });

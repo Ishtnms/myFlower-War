@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 public class GameWin extends JFrame implements MouseListener {
 
     static GameWin gameWin = new GameWin();
+    public PiecesPlayWin win  = null;
     public static  GameWin getGameWin(){
 
         return gameWin;
@@ -40,7 +41,8 @@ public class GameWin extends JFrame implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
    //GameBoard.getGameBoard().play(GamePosition.getP(e.getY()),GamePosition.getP(e.getX()));
-        new PiecesPlayWin(GamePosition.getP(e.getY()),GamePosition.getP(e.getX()));
+        if(GameManagers.gameState == GameManagers.state.think&&win == null)
+            win = new PiecesPlayWin(GamePosition.getP(e.getY()),GamePosition.getP(e.getX()));
     }
 
     @Override
